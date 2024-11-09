@@ -24,14 +24,11 @@ class ScrapController extends Controller
         preg_match_all($pattern, $res, $matches);
         foreach ($matches[1] as $row) {
             $product = $this->parseProductHtml($row);
-            $productData[] = $product;
+            if (!empty($product) && array_filter($product)) {
+                $productData[] = $product;
+            }
         }
-
-        return array_values(array_filter($productData, function ($item) {
-            return !empty($item) && array_filter($item);
-        }));
-
-        return $filteredData;
+        return $productData;
     }
 
     protected function parseProductHtml($row)
